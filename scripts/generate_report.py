@@ -254,6 +254,7 @@ def generate_html(analysis: dict) -> str:
             else ("utility-mid" if util == "\u4e2d" else "utility-low")
         )
         reason = pick.get("utility_reason", "")
+        reason_html = f'<p class="utility-reason">➡ {reason}</p>' if reason else ""
 
         top_picks_html += f"""
         <div class="news-card featured">
@@ -265,7 +266,7 @@ def generate_html(analysis: dict) -> str:
           <h3>{pick.get("title_zh", pick.get("title_en", ""))}</h3>
           <p class="journal-source">{pick.get("journal", "")} &middot; {pick.get("title_en", "")}</p>
           <p>{pick.get("summary", "")}</p>
-          {f'<p class="utility-reason">\u27a1 {reason}</p>' if reason else ""}
+          {reason_html}
           <div class="card-footer">
             {tags_html}
             <a href="{pick.get("url", "#")}" target="_blank">\u95b1\u8b80\u539f\u6587 \u2192</a>
