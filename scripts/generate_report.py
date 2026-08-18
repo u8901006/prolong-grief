@@ -255,12 +255,13 @@ def generate_html(analysis: dict) -> str:
         )
         reason = pick.get("utility_reason", "")
         reason_html = f'<p class="utility-reason">➡ {reason}</p>' if reason else ""
+        emoji = pick.get("emoji", "📄")
 
         top_picks_html += f"""
         <div class="news-card featured">
           <div class="card-header">
             <span class="rank-badge">#{pick.get("rank", "")}</span>
-            <span class="emoji-icon">{pick.get("emoji", "\U0001f4c4")}</span>
+            <span class="emoji-icon">{emoji}</span>
             <span class="{utility_class}">{util}\u5b9e\u7528\u6027</span>
           </div>
           <h3>{pick.get("title_zh", pick.get("title_en", ""))}</h3>
@@ -279,6 +280,7 @@ def generate_html(analysis: dict) -> str:
             f'<span class="tag">{t}</span>' for t in paper.get("tags", [])
         )
         util = paper.get("clinical_utility", "\u4e2d")
+        emoji = paper.get("emoji", "📄")
         utility_class = (
             "utility-high"
             if util == "\u9ad8"
@@ -287,7 +289,7 @@ def generate_html(analysis: dict) -> str:
         all_papers_html += f"""
         <div class="news-card">
           <div class="card-header-row">
-            <span class="emoji-sm">{paper.get("emoji", "\U0001f4c4")}</span>
+            <span class="emoji-sm">{emoji}</span>
             <span class="{utility_class} utility-sm">{util}</span>
           </div>
           <h3>{paper.get("title_zh", paper.get("title_en", ""))}</h3>
@@ -313,6 +315,11 @@ def generate_html(analysis: dict) -> str:
             </div>"""
 
     total_count = len(top_picks) + len(all_papers)
+
+    top_picks_section = ("<div class='section'><div class='section-title'><span class='section-icon'>⭐</span>今日精選 TOP Picks</div>" + top_picks_html + "</div>") if top_picks_html else ""
+    all_papers_section = ("<div class='section'><div class='section-title'><span class='section-icon'>📚</span>其他值得關注的文獻</div>" + all_papers_html + "</div>") if all_papers_html else ""
+    topic_section = ("<div class='topic-section section'><div class='section-title'><span class='section-icon'>📊</span>主題分佈</div>" + topic_bars_html + "</div>") if topic_bars_html else ""
+    keywords_section = ("<div class='keywords-section section'><div class='section-title'><span class='section-icon'>🏷️</span>關鍵字</div><div class='keywords'>" + keywords_html + "</div></div>") if keywords_html else ""
 
     html = f"""<!DOCTYPE html>
 <html lang="zh-TW">
@@ -406,13 +413,13 @@ def generate_html(analysis: dict) -> str:
     <p class="summary-text">{summary}</p>
   </div>
 
-  {"<div class='section'><div class='section-title'><span class='section-icon'>\u2b50</span>\u4eca\u65e5\u7cbe\u9078 TOP Picks</div>" + top_picks_html + "</div>" if top_picks_html else ""}
+  {top_picks_section}
 
-  {"<div class='section'><div class='section-title'><span class='section-icon'>\U0001f4da</span>\u5176\u4ed6\u503c\u5f97\u95dc\u6ce8\u7684\u6587\u737b</div>" + all_papers_html + "</div>" if all_papers_html else ""}
+  {all_papers_section}
 
-  {"<div class='topic-section section'><div class='section-title'><span class='section-icon'>\U0001f4ca</span>\u4e3b\u984c\u5206\u4f48</div>" + topic_bars_html + "</div>" if topic_bars_html else ""}
+  {topic_section}
 
-  {"<div class='keywords-section section'><div class='section-title'><span class='section-icon'>\U0001f3f7\ufe0f</span>\u95dc\u9375\u5b57</div><div class='keywords'>" + keywords_html + "</div></div>" if keywords_html else ""}
+  {keywords_section}
 
   <div class="links-banner">
     <a href="https://www.leepsyclinic.com/" class="link-card" target="_blank">
