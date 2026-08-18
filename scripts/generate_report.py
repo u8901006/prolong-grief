@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Generate grief & bereavement daily research report HTML using Zhipu AI.
-Reads papers JSON, analyzes with GLM-5-Turbo, generates styled HTML.
+Generate grief & bereavement daily research report HTML using NVIDIA API.
+Reads papers JSON, analyzes with NVIDIA Nemotron, generates styled HTML.
 Same color scheme and design as Psychiatry-brain.
 """
 
@@ -16,9 +16,12 @@ from datetime import datetime, timezone, timedelta
 import httpx
 
 API_BASE = os.environ.get(
-    "ZHIPU_API_BASE", "https://open.bigmodel.cn/api/coding/paas/v4"
+    "NVIDIA_API_BASE", "https://integrate.api.nvidia.com/v1"
 )
-FALLBACK_MODELS = ["glm-5-turbo", "glm-4.7", "glm-4.7-flash"]
+FALLBACK_MODELS = [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-nano-30b-a3b",
+]
 
 SYSTEM_PROMPT = (
     "你是悲傷與喪親研究領域的資深研究員與科學傳播者。你的任務是：\n"
@@ -149,9 +152,10 @@ def analyze_papers(api_key: str, papers_data: dict) -> dict:
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
         ],
-        "temperature": 0.3,
-        "top_p": 0.9,
-        "max_tokens": 100000,
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "max_tokens": 16384,
+        "chat_template_kwargs": {"enable_thinking": False},
     }
 
     for model in FALLBACK_MODELS:
@@ -231,7 +235,7 @@ def generate_html(analysis: dict) -> str:
     else:
         date_display = date_str
 
-    model_used = analysis.get("_model_used", "GLM-5-Turbo")
+    model_used = analysis.get("_model_used", FALLBACK_MODELS[0])
     summary = analysis.get("market_summary", "")
     top_picks = analysis.get("top_picks", [])
     all_papers = analysis.get("all_papers", [])
@@ -454,16 +458,9 @@ def main():
     parser.add_argument("--input", required=True, help="Input papers JSON file")
     parser.add_argument("--output", required=True, help="Output HTML file")
     parser.add_argument(
-        "--api-key", default=os.environ.get("ZHIPU_API_KEY", ""), help="Zhipu API key"
+        "--api-key", default=os.environ.get("NVIDIA_API_KEY", ""), help="NVIDIA API key"
     )
     args = parser.parse_args()
-
-    if not args.api_key:
-        print(
-            "[ERROR] No API key provided. Set ZHIPU_API_KEY env var or use --api-key",
-            file=sys.stderr,
-        )
-        sys.exit(1)
 
     papers_data = load_papers(args.input)
     if not papers_data or not papers_data.get("papers"):
@@ -479,6 +476,12 @@ def main():
             "_model_used": "N/A",
         }
     else:
+        if not args.api_key:
+            print(
+                "[ERROR] Missing NVIDIA_API_KEY repository secret",
+                file=sys.stderr,
+            )
+            sys.exit(1)
         analysis = analyze_papers(args.api_key, papers_data)
         if not analysis:
             print("[ERROR] Analysis failed, cannot generate report", file=sys.stderr)
