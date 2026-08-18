@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Generate grief & bereavement daily research report HTML using Zhipu AI.
-Reads papers JSON, analyzes with GLM-5-Turbo, generates styled HTML.
+Generate grief & bereavement daily research report HTML using NVIDIA API.
+Reads papers JSON, analyzes with NVIDIA Nemotron, generates styled HTML.
 Same color scheme and design as Psychiatry-brain.
 """
 
@@ -16,9 +16,12 @@ from datetime import datetime, timezone, timedelta
 import httpx
 
 API_BASE = os.environ.get(
-    "ZHIPU_API_BASE", "https://open.bigmodel.cn/api/coding/paas/v4"
+    "NVIDIA_API_BASE", "https://integrate.api.nvidia.com/v1"
 )
-FALLBACK_MODELS = ["glm-5-turbo", "glm-4.7", "glm-4.7-flash"]
+FALLBACK_MODELS = [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-nano-30b-a3b",
+]
 
 SYSTEM_PROMPT = (
     "你是悲傷與喪親研究領域的資深研究員與科學傳播者。你的任務是：\n"
@@ -149,9 +152,10 @@ def analyze_papers(api_key: str, papers_data: dict) -> dict:
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
         ],
-        "temperature": 0.3,
-        "top_p": 0.9,
-        "max_tokens": 100000,
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "max_tokens": 16384,
+        "chat_template_kwargs": {"enable_thinking": False},
     }
 
     for model in FALLBACK_MODELS:
@@ -231,7 +235,7 @@ def generate_html(analysis: dict) -> str:
     else:
         date_display = date_str
 
-    model_used = analysis.get("_model_used", "GLM-5-Turbo")
+    model_used = analysis.get("_model_used", FALLBACK_MODELS[0])
     summary = analysis.get("market_summary", "")
     top_picks = analysis.get("top_picks", [])
     all_papers = analysis.get("all_papers", [])
@@ -250,18 +254,20 @@ def generate_html(analysis: dict) -> str:
             else ("utility-mid" if util == "\u4e2d" else "utility-low")
         )
         reason = pick.get("utility_reason", "")
+        reason_html = f'<p class="utility-reason">➡ {reason}</p>' if reason else ""
+        emoji = pick.get("emoji", "📄")
 
         top_picks_html += f"""
         <div class="news-card featured">
           <div class="card-header">
             <span class="rank-badge">#{pick.get("rank", "")}</span>
-            <span class="emoji-icon">{pick.get("emoji", "\U0001f4c4")}</span>
+            <span class="emoji-icon">{emoji}</span>
             <span class="{utility_class}">{util}\u5b9e\u7528\u6027</span>
           </div>
           <h3>{pick.get("title_zh", pick.get("title_en", ""))}</h3>
           <p class="journal-source">{pick.get("journal", "")} &middot; {pick.get("title_en", "")}</p>
           <p>{pick.get("summary", "")}</p>
-          {f'<p class="utility-reason">\u27a1 {reason}</p>' if reason else ""}
+          {reason_html}
           <div class="card-footer">
             {tags_html}
             <a href="{pick.get("url", "#")}" target="_blank">\u95b1\u8b80\u539f\u6587 \u2192</a>
@@ -274,6 +280,7 @@ def generate_html(analysis: dict) -> str:
             f'<span class="tag">{t}</span>' for t in paper.get("tags", [])
         )
         util = paper.get("clinical_utility", "\u4e2d")
+        emoji = paper.get("emoji", "📄")
         utility_class = (
             "utility-high"
             if util == "\u9ad8"
@@ -282,7 +289,7 @@ def generate_html(analysis: dict) -> str:
         all_papers_html += f"""
         <div class="news-card">
           <div class="card-header-row">
-            <span class="emoji-sm">{paper.get("emoji", "\U0001f4c4")}</span>
+            <span class="emoji-sm">{emoji}</span>
             <span class="{utility_class} utility-sm">{util}</span>
           </div>
           <h3>{paper.get("title_zh", paper.get("title_en", ""))}</h3>
@@ -308,6 +315,11 @@ def generate_html(analysis: dict) -> str:
             </div>"""
 
     total_count = len(top_picks) + len(all_papers)
+
+    top_picks_section = ("<div class='section'><div class='section-title'><span class='section-icon'>⭐</span>今日精選 TOP Picks</div>" + top_picks_html + "</div>") if top_picks_html else ""
+    all_papers_section = ("<div class='section'><div class='section-title'><span class='section-icon'>📚</span>其他值得關注的文獻</div>" + all_papers_html + "</div>") if all_papers_html else ""
+    topic_section = ("<div class='topic-section section'><div class='section-title'><span class='section-icon'>📊</span>主題分佈</div>" + topic_bars_html + "</div>") if topic_bars_html else ""
+    keywords_section = ("<div class='keywords-section section'><div class='section-title'><span class='section-icon'>🏷️</span>關鍵字</div><div class='keywords'>" + keywords_html + "</div></div>") if keywords_html else ""
 
     html = f"""<!DOCTYPE html>
 <html lang="zh-TW">
@@ -401,13 +413,13 @@ def generate_html(analysis: dict) -> str:
     <p class="summary-text">{summary}</p>
   </div>
 
-  {"<div class='section'><div class='section-title'><span class='section-icon'>\u2b50</span>\u4eca\u65e5\u7cbe\u9078 TOP Picks</div>" + top_picks_html + "</div>" if top_picks_html else ""}
+  {top_picks_section}
 
-  {"<div class='section'><div class='section-title'><span class='section-icon'>\U0001f4da</span>\u5176\u4ed6\u503c\u5f97\u95dc\u6ce8\u7684\u6587\u737b</div>" + all_papers_html + "</div>" if all_papers_html else ""}
+  {all_papers_section}
 
-  {"<div class='topic-section section'><div class='section-title'><span class='section-icon'>\U0001f4ca</span>\u4e3b\u984c\u5206\u4f48</div>" + topic_bars_html + "</div>" if topic_bars_html else ""}
+  {topic_section}
 
-  {"<div class='keywords-section section'><div class='section-title'><span class='section-icon'>\U0001f3f7\ufe0f</span>\u95dc\u9375\u5b57</div><div class='keywords'>" + keywords_html + "</div></div>" if keywords_html else ""}
+  {keywords_section}
 
   <div class="links-banner">
     <a href="https://www.leepsyclinic.com/" class="link-card" target="_blank">
@@ -454,19 +466,13 @@ def main():
     parser.add_argument("--input", required=True, help="Input papers JSON file")
     parser.add_argument("--output", required=True, help="Output HTML file")
     parser.add_argument(
-        "--api-key", default=os.environ.get("ZHIPU_API_KEY", ""), help="Zhipu API key"
+        "--api-key", default=os.environ.get("NVIDIA_API_KEY", ""), help="NVIDIA API key"
     )
     args = parser.parse_args()
 
-    if not args.api_key:
-        print(
-            "[ERROR] No API key provided. Set ZHIPU_API_KEY env var or use --api-key",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
     papers_data = load_papers(args.input)
-    if not papers_data or not papers_data.get("papers"):
+    paper_count = int(papers_data.get("count", len(papers_data.get("papers", [])))) if papers_data else 0
+    if paper_count == 0 or not papers_data.get("papers"):
         print("[WARN] No papers found, generating empty report", file=sys.stderr)
         tz_taipei = timezone(timedelta(hours=8))
         analysis = {
@@ -479,6 +485,12 @@ def main():
             "_model_used": "N/A",
         }
     else:
+        if not args.api_key:
+            print(
+                "[ERROR] Missing NVIDIA_API_KEY repository secret",
+                file=sys.stderr,
+            )
+            sys.exit(1)
         analysis = analyze_papers(args.api_key, papers_data)
         if not analysis:
             print("[ERROR] Analysis failed, cannot generate report", file=sys.stderr)
