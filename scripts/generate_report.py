@@ -471,7 +471,8 @@ def main():
     args = parser.parse_args()
 
     papers_data = load_papers(args.input)
-    if not papers_data or not papers_data.get("papers"):
+    paper_count = int(papers_data.get("count", len(papers_data.get("papers", [])))) if papers_data else 0
+    if paper_count == 0 or not papers_data.get("papers"):
         print("[WARN] No papers found, generating empty report", file=sys.stderr)
         tz_taipei = timezone(timedelta(hours=8))
         analysis = {
