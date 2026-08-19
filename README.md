@@ -6,10 +6,10 @@
 
 **運作方式：**
 1. 每天 14:40（台北時間）自動從 PubMed 抓取最新悲傷/喪親研究文獻
-2. 使用 GLM-5-Turbo AI 模型進行摘要、分類、評估臨床實用性
+2. 使用 NVIDIA Nemotron AI 模型進行摘要、分類、評估臨床實用性
 3. 生成漂亮的 HTML 網頁部署到 GitHub Pages
 
-**技術：** Python · PubMed E-utilities · GLM-5-Turbo · GitHub Actions · GitHub Pages
+**技術：** Python · PubMed E-utilities · NVIDIA Nemotron · GitHub Actions · GitHub Pages
 
 ---
 

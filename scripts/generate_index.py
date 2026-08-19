@@ -84,7 +84,7 @@ index = f"""<!DOCTYPE html>
     </a>
   </div>
   <footer>
-    <p>Powered by PubMed + GLM-5-Turbo · <a href="https://github.com/u8901006/prolong-grief">GitHub</a></p>
+    <p>Powered by PubMed + NVIDIA Nemotron · <a href="https://github.com/u8901006/prolong-grief">GitHub</a></p>
   </footer>
 </div>
 </body>

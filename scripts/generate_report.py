@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Generate grief & bereavement daily research report HTML using Zhipu AI.
-Reads papers JSON, analyzes with GLM-5-Turbo, generates styled HTML.
+Generate grief & bereavement daily research report HTML using NVIDIA Nemotron.
+Reads papers JSON, analyzes with Nemotron, generates styled HTML.
 Same color scheme and design as Psychiatry-brain.
 """
 
@@ -16,9 +16,12 @@ from datetime import datetime, timezone, timedelta
 import httpx
 
 API_BASE = os.environ.get(
-    "ZHIPU_API_BASE", "https://open.bigmodel.cn/api/coding/paas/v4"
-)
-FALLBACK_MODELS = ["glm-5-turbo", "glm-4.7", "glm-4.7-flash"]
+    "NVIDIA_API_BASE", "https://integrate.api.nvidia.com/v1"
+).rstrip("/")
+FALLBACK_MODELS = [
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-nano-30b-a3b",
+]
 
 SYSTEM_PROMPT = (
     "你是悲傷與喪親研究領域的資深研究員與科學傳播者。你的任務是：\n"
@@ -149,42 +152,69 @@ def analyze_papers(api_key: str, papers_data: dict) -> dict:
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
         ],
-        "temperature": 0.3,
-        "top_p": 0.9,
-        "max_tokens": 100000,
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "max_tokens": 16384,
+        "chat_template_kwargs": {"enable_thinking": False},
     }
 
+    def _backoff_seconds(attempt: int) -> int:
+        return min(30 * (2 ** (attempt - 1)), 120)
+
     for model in FALLBACK_MODELS:
-        payload["model"] = model
-        for attempt in range(3):
+        for attempt in range(1, 4):
             try:
                 print(
-                    f"[INFO] Trying {model} (attempt {attempt + 1})...",
+                    f"[INFO] Trying {model} (attempt {attempt}/3)...",
                     file=sys.stderr,
                 )
                 resp = httpx.post(
                     f"{API_BASE}/chat/completions",
                     headers=headers,
                     json=payload,
-                    timeout=660,
+                    timeout=600,
                 )
                 if resp.status_code == 429:
-                    wait = 60 * (attempt + 1)
-                    print(f"[WARN] Rate limited, waiting {wait}s...", file=sys.stderr)
+                    retry_after = resp.headers.get("retry-after", "")
+                    wait = int(retry_after) if retry_after.isdigit() else _backoff_seconds(attempt)
+                    wait = min(wait, 180)
+                    print(f"[WARN] Rate limited (429), waiting {wait}s...", file=sys.stderr)
+                    time.sleep(wait)
+                    continue
+                if resp.status_code in (401, 403):
+                    print(
+                        f"[ERROR] Authentication failed ({resp.status_code}). "
+                        "Check that the NVIDIA_API_KEY repository secret is valid.",
+                        file=sys.stderr,
+                    )
+                    return None
+                if resp.status_code >= 500:
+                    wait = _backoff_seconds(attempt)
+                    print(
+                        f"[WARN] Server error {resp.status_code}, waiting {wait}s...",
+                        file=sys.stderr,
+                    )
                     time.sleep(wait)
                     continue
                 resp.raise_for_status()
                 data = resp.json()
                 text = data["choices"][0]["message"]["content"].strip()
 
+                if not text:
+                    print(
+                        f"[WARN] Empty model response on attempt {attempt}, retrying...",
+                        file=sys.stderr,
+                    )
+                    time.sleep(_backoff_seconds(attempt))
+                    continue
+
                 result = robust_json_parse(text)
                 if result is None:
                     print(
-                        f"[WARN] JSON parse failed on attempt {attempt + 1}, retrying...",
+                        f"[WARN] JSON parse failed on attempt {attempt}/3, retrying...",
                         file=sys.stderr,
                     )
-                    if attempt < 2:
-                        time.sleep(5)
+                    time.sleep(_backoff_seconds(attempt))
                     continue
 
                 print(
@@ -197,20 +227,33 @@ def analyze_papers(api_key: str, papers_data: dict) -> dict:
                 return result
 
             except httpx.HTTPStatusError as e:
+                status = e.response.status_code
                 print(
-                    f"[ERROR] HTTP {e.response.status_code}: {e.response.text[:200]}",
+                    f"[ERROR] HTTP {status}: {e.response.text[:200]}",
                     file=sys.stderr,
                 )
-                if e.response.status_code == 429:
-                    wait = 60 * (attempt + 1)
-                    time.sleep(wait)
+                if status in (401, 403):
+                    print(
+                        "[ERROR] Authentication failed. Check the NVIDIA_API_KEY secret.",
+                        file=sys.stderr,
+                    )
+                    return None
+                if status >= 500:
+                    time.sleep(_backoff_seconds(attempt))
                     continue
                 break
-            except (httpx.TimeoutException, httpx.ConnectTimeout, httpx.ReadTimeout) as e:
-                print(f"[WARN] Timeout on attempt {attempt + 1}: {e}", file=sys.stderr)
-                if attempt < 2:
-                    time.sleep(10)
-                continue
+            except (
+                httpx.TimeoutException,
+                httpx.ConnectTimeout,
+                httpx.ReadTimeout,
+                httpx.ConnectError,
+                httpx.NetworkError,
+            ) as e:
+                print(
+                    f"[WARN] Network timeout/error on attempt {attempt}: {e}",
+                    file=sys.stderr,
+                )
+                time.sleep(_backoff_seconds(attempt))
             except Exception as e:
                 print(f"[ERROR] {model} failed: {e}", file=sys.stderr)
                 break
@@ -231,7 +274,7 @@ def generate_html(analysis: dict) -> str:
     else:
         date_display = date_str
 
-    model_used = analysis.get("_model_used", "GLM-5-Turbo")
+    model_used = analysis.get("_model_used", "nvidia/nemotron-3-super-120b-a12b")
     summary = analysis.get("market_summary", "")
     top_picks = analysis.get("top_picks", [])
     all_papers = analysis.get("all_papers", [])
@@ -454,13 +497,13 @@ def main():
     parser.add_argument("--input", required=True, help="Input papers JSON file")
     parser.add_argument("--output", required=True, help="Output HTML file")
     parser.add_argument(
-        "--api-key", default=os.environ.get("ZHIPU_API_KEY", ""), help="Zhipu API key"
+        "--api-key", default=os.environ.get("NVIDIA_API_KEY", ""), help="NVIDIA API key"
     )
     args = parser.parse_args()
 
     if not args.api_key:
         print(
-            "[ERROR] No API key provided. Set ZHIPU_API_KEY env var or use --api-key",
+            "[ERROR] No API key provided. Set NVIDIA_API_KEY env var or use --api-key",
             file=sys.stderr,
         )
         sys.exit(1)
