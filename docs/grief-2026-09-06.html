@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Grief Research Daily &middot; 悲傷研究文獻日報 &middot; 2026年9月6日</title>
+<meta name="description" content="2026年9月6日 悲傷與喪親研究文獻日報，由 AI 自動彙整 PubMed 最新論文"/>
+<style>
+  :root { --bg: #f6f1e8; --surface: #fffaf2; --line: #d8c5ab; --text: #2b2118; --muted: #766453; --accent: #8c4f2b; --accent-soft: #ead2bf; --card-bg: color-mix(in srgb, var(--surface) 92%, white); }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: radial-gradient(circle at top, #fff6ea 0, var(--bg) 55%, #ead8c6 100%); color: var(--text); font-family: "Noto Sans TC", "PingFang TC", "Helvetica Neue", Arial, sans-serif; min-height: 100vh; overflow-x: hidden; }
+  .container { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
+  header { display: flex; align-items: center; gap: 16px; margin-bottom: 52px; animation: fadeDown 0.6s ease both; }
+  .logo { width: 48px; height: 48px; border-radius: 14px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 20px rgba(140,79,43,0.25); }
+  .header-text h1 { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .header-meta { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; align-items: center; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; letter-spacing: 0.3px; }
+  .badge-date { background: var(--accent-soft); border: 1px solid var(--line); color: var(--accent); }
+  .badge-count { background: rgba(140,79,43,0.06); border: 1px solid var(--line); color: var(--muted); }
+  .badge-source { background: transparent; color: var(--muted); font-size: 11px; padding: 0 4px; }
+  .summary-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 20px 60px rgba(61,36,15,0.06); animation: fadeUp 0.5s ease 0.1s both; }
+  .summary-card h2 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.6px; color: var(--accent); margin-bottom: 16px; }
+  .summary-text { font-size: 15px; line-height: 1.8; color: var(--text); }
+  .section { margin-bottom: 36px; animation: fadeUp 0.5s ease both; }
+  .section-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .section-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: var(--accent-soft); }
+  .news-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; padding: 22px 26px; margin-bottom: 12px; box-shadow: 0 8px 30px rgba(61,36,15,0.04); transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+  .news-card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(61,36,15,0.08); }
+  .news-card.featured { border-left: 3px solid var(--accent); }
+  .news-card.featured:hover { border-color: var(--accent); }
+  .card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .rank-badge { background: var(--accent); color: #fff7f0; font-weight: 700; font-size: 12px; padding: 2px 8px; border-radius: 6px; }
+  .emoji-icon { font-size: 18px; }
+  .card-header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .emoji-sm { font-size: 14px; }
+  .news-card h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.5; }
+  .journal-source { font-size: 12px; color: var(--accent); margin-bottom: 8px; opacity: 0.8; }
+  .news-card p { font-size: 13.5px; line-height: 1.75; color: var(--muted); }
+  .utility-reason { font-size: 12.5px; color: var(--accent); margin-top: 6px; font-weight: 500; }
+  .card-footer { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .tag { padding: 2px 9px; background: var(--accent-soft); border-radius: 999px; font-size: 11px; color: var(--accent); }
+  .news-card a { font-size: 12px; color: var(--accent); text-decoration: none; opacity: 0.7; margin-left: auto; }
+  .news-card a:hover { opacity: 1; }
+  .utility-high { color: #5a7a3a; font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(90,122,58,0.1); border-radius: 4px; }
+  .utility-mid { color: #9f7a2e; font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(159,122,46,0.1); border-radius: 4px; }
+  .utility-low { color: var(--muted); font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(118,100,83,0.08); border-radius: 4px; }
+  .utility-sm { font-size: 10px; }
+  .keywords-section { margin-bottom: 36px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .keyword { padding: 5px 14px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 20px; font-size: 12px; color: var(--accent); cursor: default; transition: background 0.2s; }
+  .keyword:hover { background: rgba(140,79,43,0.18); }
+  .topic-section { margin-bottom: 36px; }
+  .topic-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .topic-name { font-size: 13px; color: var(--muted); width: 120px; flex-shrink: 0; text-align: right; }
+  .topic-bar-bg { flex: 1; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .topic-bar { height: 100%; background: linear-gradient(90deg, var(--accent), #c47a4a); border-radius: 4px; transition: width 0.6s ease; }
+  .topic-count { font-size: 12px; color: var(--accent); width: 24px; }
+  .links-banner { margin-top: 48px; display: flex; flex-direction: column; gap: 12px; animation: fadeUp 0.5s ease 0.4s both; }
+  .link-card { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; text-decoration: none; color: var(--text); transition: all 0.2s; box-shadow: 0 8px 30px rgba(61,36,15,0.04); }
+  .link-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(61,36,15,0.08); }
+  .link-icon { font-size: 28px; flex-shrink: 0; }
+  .link-info { flex: 1; }
+  .link-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .link-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .link-arrow { font-size: 18px; color: var(--accent); font-weight: 700; }
+  footer { margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); display: flex; justify-content: space-between; animation: fadeUp 0.5s ease 0.5s both; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 600px) { .container { padding: 36px 18px 60px; } .summary-card, .news-card { padding: 20px 18px; } footer { flex-direction: column; gap: 6px; text-align: center; } .topic-name { width: 80px; font-size: 11px; } .links-banner { flex-direction: column; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">🎙</div>
+    <div class="header-text">
+      <h1>Grief Research Daily &middot; 悲傷研究文獻日報</h1>
+      <div class="header-meta">
+        <span class="badge badge-date">📅 2026年9月6日</span>
+        <span class="badge badge-count">📊 27 篇文獻</span>
+        <span class="badge badge-source">Powered by PubMed + nvidia/nemotron-3-super-120b-a12b</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="summary-card">
+    <h2>📋 今日悲傷研究趨勢</h2>
+    <p class="summary-text">今日研究聚焦於抑鬱症的生物標誌物（如視網膜、ACC 體積）、早期預測因子（創傷、睡眠、藥物依從性）以及新興介入（運動、TMS、酮胺）對自殺風險與情緒記憶的影響，顯示由神經科學驅動的精準預防與治療趨勢。</p>
+  </div>
+
+  <div class='section'><div class='section-title'><span class='section-icon'>⭐</span>今日精選 TOP Picks</div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#1</span>
+            <span class="emoji-icon">👁️</span>
+            <span class="utility-high">高实用性</span>
+          </div>
+          <h3>視網膜神經節細胞-內網狀層厚度增加是憂鬱症的早期表型：放射基因組學證據</h3>
+          <p class="journal-source">Journal of affective disorders &middot; Retinal microstructural alterations as early phenotypes of depression in radiogenomics analysis.</p>
+          <p>厚視網膜神經節細胞-內網狀層（GCIPL）與憂鬱症風險呈正相關，並經由視覺皮質通路與大腦憂鬱相關區域結構關聯，具早期篩檢潛力。</p>
+          <p class="utility-reason">➡ 提供非侵入性、客觀的早期憂鬱症生物標誌物，適用於初級醫療篩檢與高風險族群監測。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">神經科學</span><span class="tag">悲傷篩檢</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42637150/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#2</span>
+            <span class="emoji-icon">💔</span>
+            <span class="utility-high">高实用性</span>
+          </div>
+          <h3>童年創傷透過人格、失眠與社會支持介導自殺念圖與行為，尤其是攻擊性與孤獨感為關鍵介入目標</h3>
+          <p class="journal-source">Journal of affective disorders &middot; Childhood trauma and suicide ideation and attempts: Examining the mediating role of psychosocial, personality, lifestyle and biological factors.</p>
+          <p>童年創傷透過人格特質（神經質、內向）、失眠、低社會支持與孤獨感顯著增加自殺念圖與行為風險，其中攻擊性、失眠與社會支持為可干預的中介變項。</p>
+          <p class="utility-reason">➡ 識別出具可塑性的心理與社會因素，為創傷知照護與自殺預防提供明確介入切入點。</p>
+          <div class="card-footer">
+            <span class="tag">創傷性悲傷</span><span class="tag">自殺遺族</span><span class="tag">心理治療</span><span class="tag">喪失與孤獨</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42637149/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#3</span>
+            <span class="emoji-icon">👨‍👧‍👦</span>
+            <span class="utility-high">高实用性</span>
+          </div>
+          <h3>父親憂鬱症狀程度低於母親時，即與子女外化行為問題顯著相關，提示需降低父親憂鬱篩檢門檻</h3>
+          <p class="journal-source">Journal of affective disorders &middot; Paternal versus maternal depressive symptoms and child internalizing/externalizing problems: a comparative threshold analysis.</p>
+          <p>父親憂鬱症狀（CES-D ≥16）即與子女外化問題風險增加相關，門檻低於母親（≥21），顯示父親憂鬱早期篩檢對預防子女行為問題具有臨床意義。</p>
+          <p class="utility-reason">➡ 挑戰以母親為中心的篩檢模式，建議在兒少精神健康評估中納入父親憂鬱篩檢，尤其針對外化行為風險。</p>
+          <div class="card-footer">
+            <span class="tag">兒少喪親</span><span class="tag">憂鬱症</span><span class="tag">照顧者悲傷</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42637148/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#4</span>
+            <span class="emoji-icon">💊</span>
+            <span class="utility-high">高实用性</span>
+          </div>
+          <h3>持續使用精神藥物減少憂鬱症患者首次自殺未遂後一年內再次嘗試的風險，尤其在65歲以下患者中效果顯著</h3>
+          <p class="journal-source">Journal of affective disorders &middot; Impact of psychiatric medication on suicide reattempt risk in patients with depression: A retrospective cohort study using national health insurance data in Korea.</p>
+          <p>持續使用抗憂鬱或抗精神病藥物（≥6個月）顯著降低一年內自殺再嘗試風險（OR=0.65），但此保護效應在65歲以上族群中不顯著，提示年齡層化治療策略。</p>
+          <p class="utility-reason">➡ 提供實證支持持續藥物治療於自殺預防中的角色，尤其強調青壯年族群之重要性，指導臨床追蹤與給藥決策。</p>
+          <div class="card-footer">
+            <span class="tag">自殺遺族</span><span class="tag">憂鬱症</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42603561/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#5</span>
+            <span class="emoji-icon">🕒</span>
+            <span class="utility-mid">中实用性</span>
+          </div>
+          <h3>傍晚用餐時間不規則與伊朗成年人憂鬱症狀嚴重程度正相關，提示飲食節律為潛在調節因子</h3>
+          <p class="journal-source">Journal of affective disorders &middot; Evening meal timing irregularity is associated with higher depressive symptoms in Iranian adults: A cross-sectional study.</p>
+          <p>晚餐時間不規則（CPD分數升高）獨立預測較高憂鬱症狀（B=1.08），而早餐與午餐不規則無顯著關聯，提示 circadian 饮食模式對情緒調節的特定影響。</p>
+          <p class="utility-reason">➡ 雖為橫斷面研究，但提出簡易、可修改的生活方式因素（用餐時間規律性），可作為憂鬱症輔助管理的低成本介入切入點。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">社會文化</span><span class="tag">照顧者悲傷</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42624213/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#6</span>
+            <span class="emoji-icon">🏃‍♂️</span>
+            <span class="utility-mid">中实用性</span>
+          </div>
+          <h3>運動對憂鬱症患者情景記憶具有小至中等正向效益，效果在延遲與即時回憶中最為一致</h3>
+          <p class="journal-source">Journal of affective disorders &middot; The effects of exercise on episodic memory in patients with depression: a three-level meta-analysis.</p>
+          <p>運動介入顯著改善憂鬱症患者的情景記憶（g=0.210），特別是延遲與即時回憶，但對總學習效果不顯著，顯示其對特定記憶功能的選擇性增益。</p>
+          <p class="utility-reason">➡ 提供非藥物、低風險的認知輔助策略，適用於憂鬱症康復階段，尤其補充標準治療中常見的認知缺損。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">心理治療</span><span class="tag">神經科學</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42641961/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#7</span>
+            <span class="emoji-icon">💉</span>
+            <span class="utility-mid">中实用性</span>
+          </div>
+          <h3> ketamine 靜脈注射可快速減輕自殺住院患者的心理痛，效果在給藥後96小時內最為顯著，尤其於雙極症患者</h3>
+          <p class="journal-source">Journal of affective disorders &middot; Intravenous Ketamine reduces psychological pain in suicidal inpatients: A secondary analysis of a six-week randomized placebo-controlled trial.</p>
+          <p>單次 ketamine 注射（0.5mg/kg）在給藥後40分鐘至96小時內顯著降低心理痛，此效應與憂鬱症與絕望感獨立，提示其作為快速心理痛干預的潛力。</p>
+          <p class="utility-reason">➡ 心理痛是自殺念圖的重要前驅，ketamine 的快速作用為高風險住院患者提供臨時緩解選項，雖需注意短期效應。</p>
+          <div class="card-footer">
+            <span class="tag">自殺遺族</span><span class="tag">憂鬱症</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42575195/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#8</span>
+            <span class="emoji-icon">😌</span>
+            <span class="utility-low">低实用性</span>
+          </div>
+          <h3>心理彈性與悲觀傾向不調節壓力事件對晚年憂鬱症的影響，儘管樂觀本身降低發病風險</h3>
+          <p class="journal-source">Journal of affective disorders &middot; Effect of dispositional optimism and pessimism on the relationship between stressful life events and late-life depression.</p>
+          <p>雖然 dispositional optimism 降低晚年憂鬱症發生風險（HR=0.92），但它不減弱壓力事件對憂鬱的致病效應，提示其保護機制可能非透過緩衝壓力反應。</p>
+          <p class="utility-reason">➡ 雖支持樂觀作為風險因子，但否定其作為壓力緩衝器的角色，提示需尋找其他更具調節性的心理資源來實質降低壓力對憂鬱的影響。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">老年喪親</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42567210/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div></div>
+
+  <div class='section'><div class='section-title'><span class='section-icon'>📚</span>其他值得關注的文獻</div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🧠</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>多模式 MRI 顯示前 cingulate 皮質髓鞘重塑與 18β-甘草酸在慢性社會敗北應激小鼠中的抗憂鬱樣效應相關</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>18β-GA 經由恢復前 cingulate 皮質 BDNF 與髓鞘完整性，改善結構與功能連接，並與行為改善相關，支持其作為神經修復型抗憂鬱藥的潛力。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">神經科學</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42641963/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🏥</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>精神病性憂鬱症患者在瑞典的住院與自殺風險高，電痙攣療法有效但年齡與既往住院影響療癒</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>精神病性憂鬱症患者25.1%住院率與0.8%自殺率高，ECT 有效（89.8%反應率），但年輕與既往住院預後較差，提示早期介入與年齡層化療程的重要性。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">心理治療</span><span class="tag">自殺遺族</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42624214/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">❤️‍🩹</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>心腦血管多重 morbidities 與不佳睡眠共同增加憂鬱症發生與減少復原的風險，兩大隊列研究證實其加成效應</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>CMM 增加憂鬱症發生風險（HR=1.29）並降低復原機會（HR=0.79），且不佳睡眠（<6或≥9h）顯著加重此效應，支持雙重乾淨介入策略。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">社會文化</span><span class="tag">老年喪親</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42628578/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">⚡</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>H-coil 加速式深部 TMS 在重度憂鬱症中較快減少自殺念圖，證實治療頻率影響益處 onset 時間</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>加速式與常規 H-coil TMS 均減少自殺念圖，但前者起效更快，支持高頻率介入對急性自殺風險患者的臨床價值。</p>
+          <div class="card-footer">
+            <span class="tag">自殺遺族</span><span class="tag">憂鬱症</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42628575/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">👩‍⚕️</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>夜班護士局部腦功能同步化異常與代謝變化相關，右 medial amygdala ReHo 可能為代謝-情緒結合的神經 biomarker</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>夜班護士右 medial amygdala 局部功能同步性增加與代謝物 PC1 正相關，並間接關聯憂鬱症狀，提示其作為腦-身反射的潛在 biomarker。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">神經科學</span><span class="tag">照顧者悲傷</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42624217/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">💰</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>澳大利亞憂鬱症遺傳研究併病負擔與醫療成本高：多達89%患者有至少一種併病，疼痛與焦慮最常見</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>憂鬱症患者平均併病數為4.6，遠高於對照組的2.0，疼痛（51.0%）、焦慮（32.3%）及心血管代謝併病（13.2%）為主要負擔，醫療成本隨併病增加顯著。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42612923/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🧠</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>青少年憂鬱與焦慮症狀經腦結構網路連線：壳核與誘導核樞紐化連結症狀與腦結構</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>青少年憂鬱與焦慮症狀經由左右壳核（ pallidum）與左誘導核（ nucleus accumbens）的橋接中樞連結腦結構，支持以症狀為導向的神經干預。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">神經科學</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42612922/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🎖️</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>喪失與創傷後應激障礙在9/11後退役軍人中20年內顯著上升，PTSD增加五倍，憂鬱增加四倍，併發症增加六倍</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>9/11後退役軍人中PTSD從5.2升至25.2 cases/100人，憂鬱從3.6升至15.5，PTSD+憂鬱併發症從2.0升至12.7，凸顯長期精神健康需求與服務擴充的緊迫性。</p>
+          <div class="card-footer">
+            <span class="tag">PTSD</span><span class="tag">憂鬱症</span><span class="tag">老年喪親</span><span class="tag">自殺遺族</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42537813/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🤰</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>創傷性悲傷：兒少在母親懷孕後三 trimester 時，母親焦慮與男性胎兒心跳數相關，但變異性降低與性別無關</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>孕晚期母親焦慮與男性胎兒心率增加顯著相關，但心率變異性降低與母憂鬱/焦慮相關且不分胎兒性別，提示產前心理健康對胎兒神經發育具性別特異性影響。</p>
+          <div class="card-footer">
+            <span class="tag">周產期喪失</span><span class="tag">憂鬱症</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42521096/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">💪</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>青少年自我效能與憂鬱症狀雙向預測：久雙胞胎研究證實兩者在遺傳與環境控制後仍具有負向關聯</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>青少年自我效能高預測未來憂鬱降低，反之亦然，此關聯在控制共享基因與環境後仍存在，支持自我效能為憂鬱症的可塑保護因子。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42562065/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">⚖️</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>雙極症穩定期仍見憂鬱與焦慮症狀網路結構化：核心症狀為「有罪感」與「運動控制」，自殺念圖直接由這兩者驅動</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>雙極症穩定期患者中憂鬱（18.3%）與焦慮（15.1%）症狀形成結構化網路，「有罪感」、「無法控制的擔憂」與「運動」為核心節點，「運動」與「有罪感」直接橋接至自殺念圖，提示需針對心運動與認知症狀進行干預。</p>
+          <div class="card-footer">
+            <span class="tag">雙極症</span><span class="tag">自殺遺族</span><span class="tag">憂鬱症</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42556580/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">📋</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>MADRS-S 葡萄牙語版驗證良好：內在一致性高，與 BDI-II 強相關，但嚴重程度分級在輕度時需謹慎解讀</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>歐洲葡萄牙語 MADRS-S 具良好內在一致性（α=0.86）、穩定性（ICC=0.95）與與 BDI-II 的強聚合效度（r=0.87），ROC 顯示適切 cut-off 為11，但輕度區辨識力有限。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42556579/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">📱</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>社群媒體問題性使用而非單純使用時間，與青少年內在化問題顯著相關，尤其女生，但效應量小</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>青少年平均每日社群媒體使用時間從3.77增至6.07小時，但僅問題性使用（ compulsive use）與內在化問題（特別是女生憂鬱）顯著相關，整體使用時間無主要效應，提示需區分使用與濫用。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">社會文化</span><span class="tag">兒少喪親</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42546779/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🧠</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>未治療青少年憂鬱症樣下視丘前下 subunit 體積減少，與睡眠品質及憂鬱嚴重程度負相關，部分中介兩者關係</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>未藥物治療青少年憂鬱症樣中，左前下視丘 subunit 體積減少並與睡眠品質差及憂鬱嚴重程度呈負相關，且該體積部分解釋了兩者間的關係，提供神經機制線索。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">神經科學</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42537815/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🧘‍♀️</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>情緒調節與反芻在覺念正念對憂鬱的影響中扮演序列中介角色：重新評估增加、反芻減少為關鍵路徑</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>覺念正念透過增加重新評估與減少反芻性反芻（brooding rumination）來減少憂鬱症狀，此路徑在有冥想經驗者中更為穩定，支持情緒調節訓練作為正念介入之關鍵成分。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42521093/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🔄</span>
+            <span class="utility-low utility-sm">低</span>
+          </div>
+          <h3>雙極譜系障礙患者雙月情緒-自殺念圖動態顯示：憂鬱與自殺念圖雙向預測，躁症單向預測自殺念圖，外化特質增大其不穩定性</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>雙極譜系患者中，憂鬱與自殺念圖呈雙向預測（增加一方增加另一方），躁症僅單向預測增加自殺念圖，而攻擊性、敵意與衝動增大自殺念圖的波動與慣性，支持動態、個體化監測的必要性。</p>
+          <div class="card-footer">
+            <span class="tag">雙極症</span><span class="tag">自殺遺族</span><span class="tag">憂鬱症</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42521090/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🔁</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>創傷暴露與不健康生活樣式共同降低臨界憂鬱症狀從輕度恢復至正常的機會，兩者叠加效應顯著</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>終生創傷暴露顯著降輕度至正常恢復率（HR=0.54），不健康生活樣式同時降低恢復（HR=0.70）並增加惡化（HR=1.60），兩者併存時影響最強，支持創傷知照護與生活方式介入的結合。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">創傷性悲傷</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42551565/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">🧠</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>創傷性腦傷後自殺念圖的出現與減寬具有動態性：約30-40% 持續存在，既往精神史與早期藥物使用為風險因子，社會支持與功能為保護因子</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>TBI後自殺念圖具有高 remission 率（早期70%），但6%持續新增且30-40%慢性存在，預傷精神史與早期藥物使用增加風險，而早期功能與社會支持具保護作用，支持長期追蹤與多因素介入。</p>
+          <div class="card-footer">
+            <span class="tag">自殺遺族</span><span class="tag">創傷性悲傷</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42551564/" target="_blank">PubMed →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="card-header-row">
+            <span class="emoji-sm">👁️</span>
+            <span class="utility-mid utility-sm">中</span>
+          </div>
+          <h3>視網膜靜脈寬與動脈彎曲度為憂鬱症及後續心血管疾病的預測 biomarker：寬靜脈增加憂鬱風險，彎曲動脈增加心血管風險</h3>
+          <p class="journal-source">Journal of affective disorders</p>
+          <p>11.3年追蹤顯示視網膜靜脈寬度增加（HR=1.31）預測憂鬱症發生，而動脈彎曲度增加則預測基線憂鬱症群後續心血管疾病（HR=2.24），支持視網膜成像作為雙重系統性風險 biomarker 的潛力。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">神經科學</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42551563/" target="_blank">PubMed →</a>
+          </div>
+        </div></div>
+
+  <div class='topic-section section'><div class='section-title'><span class='section-icon'>📊</span>主題分佈</div>
+            <div class="topic-row">
+              <span class="topic-name">憂鬱症</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:100%"></div></div>
+              <span class="topic-count">25</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">神經科學</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:32%"></div></div>
+              <span class="topic-count">8</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">心理治療</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:48%"></div></div>
+              <span class="topic-count">12</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">創傷性悲傷</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:20%"></div></div>
+              <span class="topic-count">5</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">自殺遺族</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:36%"></div></div>
+              <span class="topic-count">9</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">兒少喪親</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:16%"></div></div>
+              <span class="topic-count">4</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">周產期喪失</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:4%"></div></div>
+              <span class="topic-count">1</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">老年喪親</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:12%"></div></div>
+              <span class="topic-count">3</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">PTSD</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:8%"></div></div>
+              <span class="topic-count">2</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">社會文化</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:16%"></div></div>
+              <span class="topic-count">4</span>
+            </div></div>
+
+  <div class='keywords-section section'><div class='section-title'><span class='section-icon'>🏷️</span>關鍵字</div><div class='keywords'><span class="keyword">憂鬱症</span><span class="keyword">自殺遺族</span><span class="keyword">神經科學</span><span class="keyword">心理治療</span><span class="keyword">創傷性悲傷</span><span class="keyword">兒少喪親</span><span class="keyword">周產期喪失</span><span class="keyword">老年喪親</span><span class="keyword">PTSD</span><span class="keyword">社會文化</span></div></div>
+
+  <div class="links-banner">
+    <a href="https://www.leepsyclinic.com/" class="link-card" target="_blank">
+      <span class="link-icon">🏥</span>
+      <span class="link-info">
+        <span class="link-name">李政洋身心診所首頁</span>
+        <span class="link-desc">www.leepsyclinic.com</span>
+      </span>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="https://blog.leepsyclinic.com/" class="link-card" target="_blank">
+      <span class="link-icon">📨</span>
+      <span class="link-info">
+        <span class="link-name">訂閱電子報</span>
+        <span class="link-desc">blog.leepsyclinic.com</span>
+      </span>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="https://buymeacoffee.com/CYlee" class="link-card" target="_blank">
+      <span class="link-icon">☕</span>
+      <span class="link-info">
+        <span class="link-name">Buy Me a Coffee</span>
+        <span class="link-desc">buymeacoffee.com/CYlee</span>
+      </span>
+      <span class="link-arrow">→</span>
+    </a>
+  </div>
+
+  <footer>
+    <span>資料來源：PubMed &middot; 分析模型：nvidia/nemotron-3-super-120b-a12b</span>
+    <span><a href="https://github.com/u8901006/prolong-grief">GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>
