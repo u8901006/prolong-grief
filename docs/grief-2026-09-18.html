@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Grief Research Daily &middot; 悲傷研究文獻日報 &middot; 2026年9月18日</title>
+<meta name="description" content="2026年9月18日 悲傷與喪親研究文獻日報，由 AI 自動彙整 PubMed 最新論文"/>
+<style>
+  :root { --bg: #f6f1e8; --surface: #fffaf2; --line: #d8c5ab; --text: #2b2118; --muted: #766453; --accent: #8c4f2b; --accent-soft: #ead2bf; --card-bg: color-mix(in srgb, var(--surface) 92%, white); }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: radial-gradient(circle at top, #fff6ea 0, var(--bg) 55%, #ead8c6 100%); color: var(--text); font-family: "Noto Sans TC", "PingFang TC", "Helvetica Neue", Arial, sans-serif; min-height: 100vh; overflow-x: hidden; }
+  .container { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
+  header { display: flex; align-items: center; gap: 16px; margin-bottom: 52px; animation: fadeDown 0.6s ease both; }
+  .logo { width: 48px; height: 48px; border-radius: 14px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 20px rgba(140,79,43,0.25); }
+  .header-text h1 { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .header-meta { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; align-items: center; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; letter-spacing: 0.3px; }
+  .badge-date { background: var(--accent-soft); border: 1px solid var(--line); color: var(--accent); }
+  .badge-count { background: rgba(140,79,43,0.06); border: 1px solid var(--line); color: var(--muted); }
+  .badge-source { background: transparent; color: var(--muted); font-size: 11px; padding: 0 4px; }
+  .summary-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 20px 60px rgba(61,36,15,0.06); animation: fadeUp 0.5s ease 0.1s both; }
+  .summary-card h2 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.6px; color: var(--accent); margin-bottom: 16px; }
+  .summary-text { font-size: 15px; line-height: 1.8; color: var(--text); }
+  .section { margin-bottom: 36px; animation: fadeUp 0.5s ease both; }
+  .section-title { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .section-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: var(--accent-soft); }
+  .news-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; padding: 22px 26px; margin-bottom: 12px; box-shadow: 0 8px 30px rgba(61,36,15,0.04); transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+  .news-card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(61,36,15,0.08); }
+  .news-card.featured { border-left: 3px solid var(--accent); }
+  .news-card.featured:hover { border-color: var(--accent); }
+  .card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .rank-badge { background: var(--accent); color: #fff7f0; font-weight: 700; font-size: 12px; padding: 2px 8px; border-radius: 6px; }
+  .emoji-icon { font-size: 18px; }
+  .card-header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .emoji-sm { font-size: 14px; }
+  .news-card h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.5; }
+  .journal-source { font-size: 12px; color: var(--accent); margin-bottom: 8px; opacity: 0.8; }
+  .news-card p { font-size: 13.5px; line-height: 1.75; color: var(--muted); }
+  .utility-reason { font-size: 12.5px; color: var(--accent); margin-top: 6px; font-weight: 500; }
+  .card-footer { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .tag { padding: 2px 9px; background: var(--accent-soft); border-radius: 999px; font-size: 11px; color: var(--accent); }
+  .news-card a { font-size: 12px; color: var(--accent); text-decoration: none; opacity: 0.7; margin-left: auto; }
+  .news-card a:hover { opacity: 1; }
+  .utility-high { color: #5a7a3a; font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(90,122,58,0.1); border-radius: 4px; }
+  .utility-mid { color: #9f7a2e; font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(159,122,46,0.1); border-radius: 4px; }
+  .utility-low { color: var(--muted); font-size: 11px; font-weight: 600; padding: 2px 8px; background: rgba(118,100,83,0.08); border-radius: 4px; }
+  .utility-sm { font-size: 10px; }
+  .keywords-section { margin-bottom: 36px; }
+  .keywords { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .keyword { padding: 5px 14px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 20px; font-size: 12px; color: var(--accent); cursor: default; transition: background 0.2s; }
+  .keyword:hover { background: rgba(140,79,43,0.18); }
+  .topic-section { margin-bottom: 36px; }
+  .topic-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .topic-name { font-size: 13px; color: var(--muted); width: 120px; flex-shrink: 0; text-align: right; }
+  .topic-bar-bg { flex: 1; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .topic-bar { height: 100%; background: linear-gradient(90deg, var(--accent), #c47a4a); border-radius: 4px; transition: width 0.6s ease; }
+  .topic-count { font-size: 12px; color: var(--accent); width: 24px; }
+  .links-banner { margin-top: 48px; display: flex; flex-direction: column; gap: 12px; animation: fadeUp 0.5s ease 0.4s both; }
+  .link-card { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; text-decoration: none; color: var(--text); transition: all 0.2s; box-shadow: 0 8px 30px rgba(61,36,15,0.04); }
+  .link-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(61,36,15,0.08); }
+  .link-icon { font-size: 28px; flex-shrink: 0; }
+  .link-info { flex: 1; }
+  .link-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .link-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .link-arrow { font-size: 18px; color: var(--accent); font-weight: 700; }
+  footer { margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); display: flex; justify-content: space-between; animation: fadeUp 0.5s ease 0.5s both; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 600px) { .container { padding: 36px 18px 60px; } .summary-card, .news-card { padding: 20px 18px; } footer { flex-direction: column; gap: 6px; text-align: center; } .topic-name { width: 80px; font-size: 11px; } .links-banner { flex-direction: column; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">🎙</div>
+    <div class="header-text">
+      <h1>Grief Research Daily &middot; 悲傷研究文獻日報</h1>
+      <div class="header-meta">
+        <span class="badge badge-date">📅 2026年9月18日</span>
+        <span class="badge badge-count">📊 5 篇文獻</span>
+        <span class="badge badge-source">Powered by PubMed + nvidia/nemotron-3-super-120b-a12b</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="summary-card">
+    <h2>📋 今日悲傷研究趨勢</h2>
+    <p class="summary-text">今日文獻聚焦於創傷後應激症候群 (PTSD) 的神經生物學機制與跨文化治療效果，特別強調早期關係性創傷對認知信任與腦網絡功能的破壞，以及社會支持與情感調適在復原中的關鍵作用。</p>
+  </div>
+
+  <div class='section'><div class='section-title'><span class='section-icon'>⭐</span>今日精選 TOP Picks</div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#1</span>
+            <span class="emoji-icon">🧠</span>
+            <span class="utility-high">高实用性</span>
+          </div>
+          <h3>創傷後應激症候群的腦網絡階梯功能障礙與基因表達及神經傳遞物質的關聯：地震創傷研究</h3>
+          <p class="journal-source">Psychological medicine &middot; Connectome gradient dysfunction in earthquake-induced posttraumatic stress disorder and its association with gene expression and neurotransmitter profiles.</p>
+          <p>地震創傷導致的 PTSD 患者在首要未梳狀到超梳狀腦網絡階梯中出現全域拓樸異常，尤其在視覺網絡與邊緣系統等區域，並與多巴胺、阿片素、去甲腎上腺素及膽鹼系統的分布及線粒體相關基因表達共定位，提供創傷對腦網絡發育的神經生物學解釋。</p>
+          <p class="utility-reason">➡ 揭示 PTSD 的神經生物學標誌物，有助於開發神經影像或分子層面的早期檢測與個性化介入目標。</p>
+          <div class="card-footer">
+            <span class="tag">PTSD</span><span class="tag">神經科學</span><span class="tag">創傷性悲傷</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42740407/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#2</span>
+            <span class="emoji-icon">🔗</span>
+            <span class="utility-high">高实用性</span>
+          </div>
+          <h3>創傷類型與時間點對認知信任的互動影響：早期關係性創傷為認知信任受損之首要預測因子</h3>
+          <p class="journal-source">Translational psychiatry &middot; Cracks in the foundation: disrupted epistemic trust as a link between trauma, PTSD and disturbances in self-organization.</p>
+          <p>儘管創傷類型或發生時間單獨無法預測認知信任狀態，但早期關係性創傷與認知信任受損具有最強關聯，且過度輕信（heightened credulity）在創傷與 PTSD/cPTSD 症狀間具中介作用，凸顯早期人際創傷對社會學習機制的特殊破壞性影響。</p>
+          <p class="utility-reason">➡ 提供創傷知識治療（trauma-informed care）的機制基礎，強調在評估與治療創傷後心理問題時，必須考量創傷類型與發生時期的互動效應。</p>
+          <div class="card-footer">
+            <span class="tag">PTSD</span><span class="tag">複雜性悲傷</span><span class="tag">創傷性悲傷</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42754566/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#3</span>
+            <span class="emoji-icon">🌍</span>
+            <span class="utility-high">高实用性</span>
+          </div>
+          <h3>低中收入國家創傷後應激症候群的社會心理介入效果：貝氏元分析證明其大效應值與持久性</h3>
+          <p class="journal-source">Psychological medicine &middot; Psychosocial interventions for posttraumatic stress disorder in low- and middle-income countries: a Bayesian meta-analysis.</p>
+          <p>首次針對低中收入國家（LMICs）進行的創傷後應激症候群社會心理介入綜合分析，納入 55 個 RCT（5,041 人），結果顯示介入在 PTSD 症狀上產生大效應值（between-group g = -1.31），且效果在隨訪中持續，尤其當介入為創傷焦點、面對面提供且參與者年長時效果最佳，支持該類介入作為一線治療方案。</p>
+          <p class="utility-reason">➡ 為資源有限地區提供強有力證據，支持推廣具文化適切性的創傷焦點心理治療，減少全域心理健康不公。</p>
+          <div class="card-footer">
+            <span class="tag">PTSD</span><span class="tag">心理治療</span><span class="tag">社會文化</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42750363/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#4</span>
+            <span class="emoji-icon">💊</span>
+            <span class="utility-mid">中实用性</span>
+          </div>
+          <h3>進食失調症治療預後：情緒症狀變化強於動機偏向，成為復原的最強預測因子</h3>
+          <p class="journal-source">Psychological medicine &middot; Re-evaluating the predictive value of reinforcement motivation on outcome in anorexia nervosa: The role of affective symptoms.</p>
+          <p>在進食失調症（AN）青少年和年輕女性中，雖然動機偏向（懲罰敏感度高於獎賞）與症狀相關，但一年追蹤顯示，情緒症狀（特別是憂鬱）的改善才是預後最一致且強度最高的預測因子，超越強化動機的預測力，提示治療應優先針對情感調節。</p>
+          <p class="utility-reason">➡ 雖未直接研究悲傷，但提醒臨床師在任何慢性創傷或喪失相關精神疾病治療中，情緒症狀的改善可能比認知或行為偏向更具預後意義，具有跨疾病啟發性。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">心理治療</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42750364/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div>
+        <div class="news-card featured">
+          <div class="card-header">
+            <span class="rank-badge">#5</span>
+            <span class="emoji-icon">🛡️</span>
+            <span class="utility-mid">中实用性</span>
+          </div>
+          <h3>先天免疫缺陷患者因感染顧慮而自我隔離，與憂慮及焦慮症狀嚴重程度顯著正相關，提醒須整合心理健康評估</h3>
+          <p class="journal-source">BMC psychiatry &middot; Frequency of depression and anxiety in patients with inborn errors of immunity: a cross-sectional study.</p>
+          <p>在先天免疫缺陷患者中，自我隔離行為（因感染顧慮）與 PHQ-9（ρ = 0.52）及 GAD-7（ρ = 0.48）評分呈顯著正相關，且超過四分之一具相關症狀的患者未獲診斷或治療，凸顯此群體心理健康需求被忽視的問題。</p>
+          <p class="utility-reason">➡ 提醒免疫科與全醫師注意慢性疾病患者因健康焦慮導致的社會退縮與情緒困擾，應納入常規篩檢與多科協作，具預防精神併發症之實用價值。</p>
+          <div class="card-footer">
+            <span class="tag">憂鬱症</span><span class="tag">焦慮症</span><span class="tag">自我隔離</span>
+            <a href="https://pubmed.ncbi.nlm.nih.gov/42745244/" target="_blank">閱讀原文 →</a>
+          </div>
+        </div></div>
+
+  
+
+  <div class='topic-section section'><div class='section-title'><span class='section-icon'>📊</span>主題分佈</div>
+            <div class="topic-row">
+              <span class="topic-name">PTSD</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:100%"></div></div>
+              <span class="topic-count">4</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">創傷性悲傷</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:75%"></div></div>
+              <span class="topic-count">3</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">憂鬱症</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:50%"></div></div>
+              <span class="topic-count">2</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">神經科學</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:25%"></div></div>
+              <span class="topic-count">1</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">心理治療</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:75%"></div></div>
+              <span class="topic-count">3</span>
+            </div>
+            <div class="topic-row">
+              <span class="topic-name">社會文化</span>
+              <div class="topic-bar-bg"><div class="topic-bar" style="width:25%"></div></div>
+              <span class="topic-count">1</span>
+            </div></div>
+
+  <div class='keywords-section section'><div class='section-title'><span class='section-icon'>🏷️</span>關鍵字</div><div class='keywords'><span class="keyword">PTSD</span><span class="keyword">創傷</span><span class="keyword">認知信任</span><span class="keyword">腦網絡</span><span class="keyword">情感調節</span><span class="keyword">社會支持</span><span class="keyword">低中收入國家</span></div></div>
+
+  <div class="links-banner">
+    <a href="https://www.leepsyclinic.com/" class="link-card" target="_blank">
+      <span class="link-icon">🏥</span>
+      <span class="link-info">
+        <span class="link-name">李政洋身心診所首頁</span>
+        <span class="link-desc">www.leepsyclinic.com</span>
+      </span>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="https://blog.leepsyclinic.com/" class="link-card" target="_blank">
+      <span class="link-icon">📨</span>
+      <span class="link-info">
+        <span class="link-name">訂閱電子報</span>
+        <span class="link-desc">blog.leepsyclinic.com</span>
+      </span>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="https://buymeacoffee.com/CYlee" class="link-card" target="_blank">
+      <span class="link-icon">☕</span>
+      <span class="link-info">
+        <span class="link-name">Buy Me a Coffee</span>
+        <span class="link-desc">buymeacoffee.com/CYlee</span>
+      </span>
+      <span class="link-arrow">→</span>
+    </a>
+  </div>
+
+  <footer>
+    <span>資料來源：PubMed &middot; 分析模型：nvidia/nemotron-3-super-120b-a12b</span>
+    <span><a href="https://github.com/u8901006/prolong-grief">GitHub</a></span>
+  </footer>
+</div>
+</body>
+</html>
