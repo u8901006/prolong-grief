@@ -18,10 +18,7 @@ import httpx
 API_BASE = os.environ.get(
     "NVIDIA_API_BASE", "https://integrate.api.nvidia.com/v1"
 ).rstrip("/")
-FALLBACK_MODELS = [
-    "nvidia/nemotron-3-super-120b-a12b",
-    "nvidia/nemotron-3-nano-30b-a3b",
-]
+FALLBACK_MODELS = [s.strip() for s in os.environ.get("NVIDIA_MODELS", "nvidia/nemotron-3.5-lightning-30b-a3b,deepseek-ai/deepseek-v4.1-flash").split(",") if s.strip()]
 
 SYSTEM_PROMPT = (
     "你是悲傷與喪親研究領域的資深研究員與科學傳播者。你的任務是：\n"
@@ -274,7 +271,7 @@ def generate_html(analysis: dict) -> str:
     else:
         date_display = date_str
 
-    model_used = analysis.get("_model_used", "nvidia/nemotron-3-super-120b-a12b")
+    model_used = analysis.get("_model_used", FALLBACK_MODELS[0])
     summary = analysis.get("market_summary", "")
     top_picks = analysis.get("top_picks", [])
     all_papers = analysis.get("all_papers", [])
